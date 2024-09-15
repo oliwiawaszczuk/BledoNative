@@ -15,14 +15,17 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(80), unique=True, nullable=False)
 
-    def __init__(self, username):
+    def __init__(self, username, email, password):
         self.username = username
+        self.email = email
+        self.password = password
 
 
 @app.route('/api/users', methods=['GET'])
 def get_users():
-    print("pobiera users")
     users = User.query.all()
     return jsonify([{'id': user.id, 'username': user.username} for user in users])
 
@@ -35,6 +38,22 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"id": new_user.id, "username": new_user.username}), 201
+
+
+@app.route('/api/login/', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"statusText": "user with login does not exist"}), 401
+
+    if user.password != password:
+        return jsonify({"statusText": "password is wrong, try again"}), 401
+
+    return jsonify({"statusText": "success"}), 200
 
 
 if __name__ == '__main__':
