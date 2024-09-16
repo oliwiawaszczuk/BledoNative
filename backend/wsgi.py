@@ -45,6 +45,7 @@ def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
+    print(email, password)
 
     user = User.query.filter_by(email=email).first()
     if not user:
@@ -57,4 +58,6 @@ def login():
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(host="0.0.0.0", port="5000", debug=True)

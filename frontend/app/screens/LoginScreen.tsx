@@ -1,17 +1,24 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {TextInput, Button, Text, Card} from 'react-native-paper';
+import {storage} from "../../api/store";
 
 export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
 
-    const loginHangle = async () => {
-        if (email == '' || password == '') {
+    const login = storage((state) => state.login);
+    const setLoginState = storage((state) => state.setLoginState);
+    const setError = storage((state) => state.setError);
+    const error = storage((state) => state.error);
+
+    const loginHangle = useCallback( async () => {
+        if (email.trim() == '' || password.trim() == '') {
             setError("Fields cannot be empty!");
             return;
         }
+
+        setLoginState("logging");
 
         try {
             const response = await fetch('http://192.168.1.191:5000/api/login', {
@@ -22,18 +29,22 @@ export default function LoginScreen({navigation}) {
                 body: JSON.stringify({email, password})
             });
 
-            const data = await response.json();
+            const data = await response.json()
             setEmail("")
             setPassword("")
             setError(data.statusText)
 
             if(response.ok) {
-                console.log("login success")
+                // console.log("login success")
+                login("token")
+            } else {
+                setLoginState("not-login");
             }
         } catch (error) {
-            console.error('Error fetching login: ', error )
+            // console.error('Error fetching login: ', error )
+            setLoginState("not-login");
         }
-    }
+    }, [email, password, error])
 
     return (
         <View style={styles.container}>
