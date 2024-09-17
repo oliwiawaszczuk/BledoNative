@@ -8,8 +8,8 @@ import {storage} from "../../api/store";
 const Tab = createBottomTabNavigator();
 
 export function Not_Login_Navigator() {
-    return ( //screenOptions={{headerShown: false, tabBarStyle: {display: 'none'}}}
-        <Tab.Navigator >
+    return (
+        <Tab.Navigator screenOptions={{headerShown: false, tabBarStyle: {display: 'none'}}}>
             <Tab.Screen name="LoginScreen" component={LoginScreen}/>
             <Tab.Screen name="RegisterScreen" component={RegisterScreen}/>
         </Tab.Navigator>

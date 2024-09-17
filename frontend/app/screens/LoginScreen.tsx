@@ -70,7 +70,10 @@ export default function LoginScreen({navigation}) {
                     <Button mode="contained" style={styles.button} onPress={loginHangle}>
                         Log In
                     </Button>
-                    <Button onPress={() => navigation.navigate('RegisterScreen')}>
+                    <Button onPress={() => {
+                        navigation.navigate('RegisterScreen');
+                        setError("");
+                    }}>
                         Don't have an account? Register
                     </Button>
                 </Card.Content>
