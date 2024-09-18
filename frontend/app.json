@@ -1,5 +1,10 @@
 {
   "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "8a0f3712-67d0-401a-9abb-4c4f0022c141"
+      }
+    },
     "name": "frontend",
     "slug": "frontend",
     "version": "1.0.0",

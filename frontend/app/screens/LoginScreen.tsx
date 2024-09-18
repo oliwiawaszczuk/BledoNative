@@ -11,6 +11,7 @@ export default function LoginScreen({navigation}) {
     const setLoginState = storage((state) => state.setLoginState);
     const setError = storage((state) => state.setError);
     const error = storage((state) => state.error);
+    const notificationToken = storage((state) => state.notificationToken);
 
     const loginHangle = useCallback( async () => {
         if (email.trim() == '' || password.trim() == '') {
@@ -26,7 +27,7 @@ export default function LoginScreen({navigation}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({email, password, notificationToken})
             });
 
             const data = await response.json()
@@ -35,8 +36,7 @@ export default function LoginScreen({navigation}) {
             setError(data.statusText)
 
             if(response.ok) {
-                // console.log("login success")
-                login("token")
+                login(data.token)
             } else {
                 setLoginState("not-login");
             }

@@ -13,6 +13,7 @@ export default function RegisterScreen({navigation}) {
     const error = storage((state) => state.error);
     const login = storage((state) => state.login);
     const setLoginState = storage((state) => state.setLoginState);
+    const notificationToken = storage((state) => state.notificationToken);
 
     const registerHangle = useCallback( async () => {
         if (email.trim() === '' || password.trim() === '' || username.trim() === '' || confirmPassword.trim() === '') {
@@ -32,7 +33,7 @@ export default function RegisterScreen({navigation}) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({email, username, password})
+                body: JSON.stringify({email, username, password, notificationToken})
             });
 
             const data = await response.json()
@@ -44,7 +45,7 @@ export default function RegisterScreen({navigation}) {
 
             if(response.ok) {
                 console.log("login success")
-                login("token")
+                login(data.token)
             } else {
                 setLoginState("not-login");
             }
@@ -62,6 +63,7 @@ export default function RegisterScreen({navigation}) {
                     <TextInput
                         label="Email"
                         style={styles.input}
+                        maxLength={60}
                         keyboardType="email-address"
                         onChangeText={text => setEmail(text)}
                         autoCapitalize="none"
@@ -69,18 +71,21 @@ export default function RegisterScreen({navigation}) {
                     <TextInput
                         label="Username"
                         style={styles.input}
+                        maxLength={60}
                         autoCapitalize="none"
                         onChangeText={text => setUsername(text)}
                     />
                     <TextInput
                         label="Password"
                         style={styles.input}
+                        maxLength={70}
                         onChangeText={text => setPassword(text)}
                         secureTextEntry
                     />
                     <TextInput
                         label="Confirm Password"
                         style={styles.input}
+                        maxLength={70}
                         onChangeText={text => setConfirmPassword(text)}
                         secureTextEntry
                     />
