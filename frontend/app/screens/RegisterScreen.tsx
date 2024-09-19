@@ -94,7 +94,7 @@ export default function RegisterScreen({navigation}) {
                         Register
                     </Button>
                     <Button onPress={() => {
-                        navigation.navigate('LoginScreen');
+                        navigation.navigate('Login');
                         setError("")
                     }}>
                         Already have an account? Log In

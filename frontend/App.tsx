@@ -4,6 +4,9 @@ import {storage} from "./api/store";
 import {View, Text} from "react-native";
 import React, {useCallback, useEffect} from "react";
 import {registerForPushNotificationsAsync} from "./api/notification";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const auto_login = async (token: string, login, setLoginState) => {
     try {
@@ -68,8 +71,10 @@ export default function App() {
     }
 
     return (
-        <NavigationContainer>
-            {loginState === "not-login" ? <Not_Login_Navigator /> : <Login_Navigator />}
-        </NavigationContainer>
+        <QueryClientProvider client={queryClient}>
+            <NavigationContainer>
+                {loginState === "not-login" ? <Not_Login_Navigator /> : <Login_Navigator />}
+            </NavigationContainer>
+        </QueryClientProvider>
     );
 }

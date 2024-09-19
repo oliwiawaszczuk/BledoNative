@@ -64,11 +64,9 @@ def create_login_routes(app):
 
     @app.route('/api/logout/', methods=['POST'])
     def logout():
-        print("wylogowywanie")
         data = request.get_json()
         token = data.get('token')
         session = Session.query.filter_by(token=token).first()
-        print("sesja: ", session)
         if session:
             db.session.delete(session)
             db.session.commit()
