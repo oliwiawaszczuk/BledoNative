@@ -5,6 +5,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import {storage} from "../../api/store";
 import ProjectsScreen from "../screens/ProjectsScreen";
+import ProjectScreen from "../screens/ProjectScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,6 +23,7 @@ export function Login_Navigator() {
         <Tab.Navigator>
             <Tab.Screen name="Home" component={HomeScreen}/>
             <Tab.Screen name="Projects" component={ProjectsScreen} options={{headerShown: false}}/>
+            <Tab.Screen name="Project" component={ProjectScreen}  options={{ tabBarButton: () => null, headerShown: false}}/>
         </Tab.Navigator>
     );
 }

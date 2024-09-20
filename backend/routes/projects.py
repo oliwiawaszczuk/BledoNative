@@ -2,6 +2,7 @@ from flask import request, jsonify
 
 from database.models import Project, Person_in_project, Session, Invited_person_to_project, Permission
 from lib import db
+from sqlalchemy import desc
 
 
 def create_projects_routes(app):
@@ -26,7 +27,7 @@ def create_projects_routes(app):
                 "id": project.id,
                 "name": project.name,
                 "description": project.description
-             } for project in Project.query.filter_by(creator_user_id=user_id).all()]
+             } for project in Project.query.filter_by(creator_user_id=user_id).order_by(desc(Project.sort_order)).all()]
 
         projects_in = [{
             "id": project.project_id,
@@ -77,8 +78,23 @@ def create_projects_routes(app):
         new_project_name = data.get('newProjectName')
         new_project_description = data.get('newProjectDescription')
 
-        project = Project(new_project_name, new_project_description, user_id)
+        sort_order = max([project.sort_order for project in Project.query.filter_by(creator_user_id=user_id).all()] + [0]) + 1
+        project = Project(new_project_name, new_project_description, user_id, sort_order)
         db.session.add(project)
         db.session.commit()
+
+        return jsonify({}), 200
+
+    @app.route('/api/try_move_card/<project_id>/<direction>')
+    def try_move_card(project_id, direction):
+        project = Project.query.filter_by(id=project_id).first()
+        direction_int = 1 if direction == 'up' else -1
+        project_to_swap = Project.query.filter_by(creator_user_id=project.creator_user_id, sort_order=(project.sort_order + direction_int)).first()
+        if project_to_swap:
+            temp_sort_order = project.sort_order
+            project.sort_order = project_to_swap.sort_order
+            project_to_swap.sort_order = temp_sort_order
+
+            db.session.commit()
 
         return jsonify({}), 200

@@ -50,11 +50,13 @@ class Project(db.Model):
     creator_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     # people_in_projekt = db.Column(JSON, nullable=True)
     # invited_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    sort_order = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, name, description, creator_user_id):
+    def __init__(self, name, description, creator_user_id, sort_order):
         self.name = name
         self.description = description
         self.creator_user_id = creator_user_id
+        self.sort_order = sort_order
 
 
 class Person_in_project(db.Model):
@@ -63,6 +65,7 @@ class Person_in_project(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'))
+    sort_order = db.Column(db.Integer, nullable=False)
 
     def __init__(self, project_id, user_id, permission_id):
         self.project_id = project_id
