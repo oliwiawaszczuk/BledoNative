@@ -1,7 +1,7 @@
 import NavigationContainer from "expo-router/build/fork/NavigationContainer.native";
 import {Login_Navigator, Not_Login_Navigator} from "./app/navigation/TabNavigator";
 import {storage} from "./api/store";
-import {View, Text} from "react-native";
+import {View, Text, Platform, UIManager} from "react-native";
 import React, {useCallback, useEffect} from "react";
 import {registerForPushNotificationsAsync} from "./api/notification";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
@@ -32,6 +32,10 @@ const auto_login = async (token: string, login, setLoginState) => {
         console.log("auto login with token: ", token, " - not not success");
         setLoginState("not-login");
     }
+}
+
+if (Platform.OS === 'android') {
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 export default function App() {

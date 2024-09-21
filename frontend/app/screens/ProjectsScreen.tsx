@@ -14,10 +14,6 @@ import {InviteCard} from "../components/InviteCard";
 import {ProjectCard} from "../components/ProjectCard";
 import {styles} from "../../assets/styles";
 
-if (Platform.OS === 'android') {
-    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
 export default function ProjectsScreen({navigation}) {
     const [selectedTab, setSelectedTab] = useState('owner');
     const token = storage((state) => state.token);

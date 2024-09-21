@@ -5,6 +5,10 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f5f5f5',
     },
+    container2: {
+        flex: 1,
+        flexDirection: 'row',
+    },
     addButton: {
         marginBottom: 16,
         backgroundColor: '#553e90',
@@ -157,5 +161,51 @@ export const styles = StyleSheet.create({
     closeModalButtonText: {
         fontSize: 16,
         color: '#444',
+    },
+    navBarContainer: {
+        flexDirection: 'column',
+        backgroundColor: '#ffffff',
+        borderRadius: 15,
+        elevation: 5,
+        paddingTop: 7,
+        paddingHorizontal: 10,
+        margin: 12,
+        alignItems: 'flex-start',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+    },
+    navBarIconText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        marginBottom: 12,
+        borderRadius: 12,
+        backgroundColor: '#ded4f0',
+        width: '100%',
+    },
+    navBarIcon: {
+        fontSize: 24,
+        color: '#4b3a77',
+    },
+    navBarText: {
+        paddingLeft: 12,
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#4b3a77',
+    },
+    toggleButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 8,
+        marginBottom: 15,
+        backgroundColor: '#4b3a77',
+        borderRadius: 50,
+        alignSelf: 'center',
+    },
+    toggleButtonIcon: {
+        fontSize: 28,
+        color: '#ffffff',
     },
 });

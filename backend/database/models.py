@@ -67,10 +67,11 @@ class Person_in_project(db.Model):
     permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'))
     sort_order = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, project_id, user_id, permission_id):
+    def __init__(self, project_id, user_id, permission_id, sort_order):
         self.project_id = project_id
         self.user_id = user_id
         self.permission_id = permission_id
+        self.sort_order = sort_order
 
 
 class Invited_person_to_project(db.Model):
@@ -94,19 +95,38 @@ class Invited_person_to_project(db.Model):
 class Permission(db.Model):
     __tablename__ = 'permissions'
     id = db.Column(db.Integer, primary_key=True)
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
-    # permisje na cos
-    # kolejne cos
+    can_add_users = db.Column(db.Boolean, nullable=False, default=False)
+    can_edit_details_about_users = db.Column(db.Boolean, nullable=False, default=False)
+    can_kick_people = db.Column(db.Boolean, nullable=False, default=False)
+    can_add_events = db.Column(db.Boolean, nullable=False, default=False)
+    can_edit_settings_project = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self):
-        pass
+        self.can_add_users = False
+        self.can_edit_details_about_users = False
+        self.can_kick_people = False
+        self.can_add_events = False
+        self.can_edit_settings_project = False
 
     def set_as_admin(self):
-        pass # pozwolenie na wszystko
+        self.can_add_users = True
+        self.can_edit_details_about_users = True
+        self.can_kick_people = True
+        self.can_add_events = True
+        self.can_edit_settings_project = True
+        return self
 
     def set_as_viewer(self):
         pass
+
+    def to_dict(self):
+        return {
+            'can_add_users': self.can_add_users,
+            'can_edit_details_about_users': self.can_edit_details_about_users,
+            'can_kick_people': self.can_kick_people,
+            'can_add_events': self.can_add_events,
+            'can_edit_settings_project': self.can_edit_settings_project,
+        }
 
 
 class Task(db.Model):

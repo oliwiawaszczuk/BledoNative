@@ -11,8 +11,8 @@ export default function HomeScreen({navigation}) {
 
     return (
         <View>
-            <Logout/>
-            {notificationToken && <Button mode="contained" onPress={() => sendPushNotification(notificationToken)}>Send notification</Button>}
+            {/*<Logout/>*/}
+            {/*{notificationToken && <Button mode="contained" onPress={() => sendPushNotification(notificationToken)}>Send notification</Button>}*/}
         </View>
     );
 }

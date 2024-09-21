@@ -51,14 +51,16 @@ def create_projects_routes(app):
         if invitation:
             user_id = invitation.user_id
             project_id = invitation.project_id
-            db.session.delete(invitation)
-            db.session.commit()
 
             permission = Permission()
             db.session.add(permission)
             db.session.commit()
-            project_in = Person_in_project(project_id=project_id, user_id=user_id, permission_id=permission.id)
+
+            sort_order = max([project.sort_order for project in Person_in_project.query.filter_by(user_id=user_id).all()] + [0]) + 1
+            project_in = Person_in_project(project_id=project_id, user_id=user_id, permission_id=permission.id, sort_order=sort_order)
             db.session.add(project_in)
+            db.session.commit()
+            db.session.delete(invitation)
             db.session.commit()
         return jsonify({}), 200
 
@@ -98,3 +100,16 @@ def create_projects_routes(app):
             db.session.commit()
 
         return jsonify({}), 200
+
+    @app.route('/api/get_project_details/<project_id>/<token>')
+    def get_project_details(project_id, token):
+        project = Project.query.filter_by(id=project_id).first()
+        user_id = Session.query.filter_by(token=token).first().user_id
+
+        if project.creator_user_id == user_id:
+            permission = Permission().set_as_admin()
+        else:
+            person_in_project = Person_in_project.query.filter_by(project_id=project.id).first()
+            permission = Permission.query.filter_by(id=person_in_project.permission_id).first()
+
+        return jsonify({"name": project.name, "description": project.description, 'permissions': permission.to_dict()}), 200
