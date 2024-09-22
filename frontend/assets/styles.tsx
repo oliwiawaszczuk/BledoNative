@@ -1,6 +1,15 @@
 import {StyleSheet} from "react-native";
 
 export const styles = StyleSheet.create({
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
@@ -8,6 +17,7 @@ export const styles = StyleSheet.create({
     container2: {
         flex: 1,
         flexDirection: 'row',
+        marginTop: 20,
     },
     addButton: {
         marginBottom: 16,
@@ -41,7 +51,7 @@ export const styles = StyleSheet.create({
     input: {
         width: '100%',
         height: 40,
-        borderColor: '#ddd',
+        borderColor: 'rgba(221,221,221,0)',
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 15,
@@ -66,15 +76,15 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     cancelButton: {
-        width: '100%',
-        backgroundColor: '#F44336',
-        paddingVertical: 10,
-        borderRadius: 5,
+        width: '80%',
+        backgroundColor: 'rgba(226,85,75,0.94)',
+        paddingVertical: 8,
+        borderRadius: 15,
         alignItems: 'center',
     },
     cancelButtonText: {
+        fontSize: 14,
         color: '#ffffff',
-        fontSize: 16,
         fontWeight: 'bold',
     },
     tabContainer: {
@@ -172,7 +182,7 @@ export const styles = StyleSheet.create({
         margin: 12,
         alignItems: 'flex-start',
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.2,
         shadowRadius: 5,
     },
@@ -207,5 +217,86 @@ export const styles = StyleSheet.create({
     toggleButtonIcon: {
         fontSize: 28,
         color: '#ffffff',
+    },
+    rowContainer: {
+        padding: 15,
+        backgroundColor: '#f0f4f8',
+        borderRadius: 12,
+        margin: 15,
+        elevation: 3,
+    },
+    imageContainer: {
+        marginRight: 15,
+    },
+    userImage: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: '#4b3a77',
+    },
+    textContainer2: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    greetingText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#2d3436',
+        fontFamily: 'Roboto',
+    },
+    timeText: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#596a70',
+        marginRight: 10,
+    },
+    dateText: {
+        fontSize: 16,
+        color: '#636e72',
+    },
+    dateCont: {
+        // width: "70%",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: "center",
+        fontSize: 16,
+        color: '#636e72',
+        marginTop: 5,
+    },
+    detailsContainer: {
+        marginTop: 10,
+        padding: 15,
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+    },
+    textArea: {
+        height: 100,
+        textAlignVertical: 'top',
+    },
+    editButton: {
+        marginTop: 10,
+        backgroundColor: '#7257b6',
+        borderRadius: 15,
+        width: '80%',
+        alignSelf: 'center',
+    },
+    saveButton: {
+        marginBottom: 8,
+        width: '100%',
+        backgroundColor: '#28a745',
+        elevation: 2,
+    },
+    detailTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#4b3a77',
+        marginTop: 10,
+    },
+    detailText: {
+        fontSize: 14,
+        color: '#555',
+        marginBottom: 8,
     },
 });

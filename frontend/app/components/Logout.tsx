@@ -35,7 +35,7 @@ export default function Logout() {
 
     return (
         <View>
-            <Button mode="contained" onPress={logoutHandle}>
+            <Button mode="text" onPress={logoutHandle}>
                 Logout
             </Button>
         </View>

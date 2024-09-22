@@ -42,8 +42,8 @@ const ProjectScreen = ({route}) => {
 
     if (isLoading) {
         return (
-            <View>
-                <Text>Loading...</Text>
+            <View style={styles.loadingContainer}>
+                <Text style={styles.loadingText}>Loading...</Text>
             </View>
         );
     }

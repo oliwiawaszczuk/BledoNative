@@ -13,12 +13,24 @@ class User(db.Model):
     password = db.Column(db.String(256), unique=True, nullable=False)
     img_path = db.Column(db.String(80), nullable=True)
     description = db.Column(db.String(256), nullable=True)
-    position = db.Column(db.String(44), nullable=True)
+    position = db.Column(db.String(120), nullable=True)
 
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
+        self.img_path = 'default.png'
+        self.description = ''
+        self.position = ''
+
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'email': self.email,
+            'img_path': self.img_path,
+            'description': self.description,
+            'position': self.position
+        }
 
 
 class Session(db.Model):
