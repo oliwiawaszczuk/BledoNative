@@ -55,7 +55,7 @@ const ProjectScreen = ({route}) => {
             </View>
             <View style={{'flex': 1}}>
                 {currentPage === "dashboard" && <Dashboard/>}
-                {currentPage === "users" && <Users/>}
+                {currentPage === "users" && <Users projectId={projectId} permissions={permissions}/>}
                 {currentPage === "tasks" && <Tasks/>}
                 {currentPage === "calendar" && <Calendar/>}
                 {currentPage === "reports" && <Reports/>}

@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from database.models import Project, Person_in_project, Session, Invited_person_to_project, Permission
+from database.models import Project, Person_in_project, Session, Invited_person_to_project, Permission, User
 from lib import db
 from sqlalchemy import desc
 
@@ -113,3 +113,12 @@ def create_projects_routes(app):
             permission = Permission.query.filter_by(id=person_in_project.permission_id).first()
 
         return jsonify({"name": project.name, "description": project.description, 'permissions': permission.to_dict()}), 200
+
+    @app.route('/api/get_all_users_for_project_id/<project_id>')
+    def get_all_users_for_project_id(project_id):
+        project = Project.query.filter_by(id=project_id).first()
+        users_id = [project.user_id for project in Person_in_project.query.filter_by(project_id=project_id).all()]
+        users_id.append(project.creator_user_id)
+        user_dict = [User.query.filter_by(id=user_id).first().to_dict() for user_id in users_id]
+
+        return jsonify({"users": user_dict}), 200
