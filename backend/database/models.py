@@ -92,16 +92,11 @@ class Invited_person_to_project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'))
     invited_by = db.Column(db.String(80), db.ForeignKey('users.username'))
-    description = db.Column(db.String(256), nullable=True)
 
-    def __init__(self, user_id, project_id, invited_by, description):
+    def __init__(self, user_id, project_id, invited_by):
         self.user_id = user_id
         self.project_id = project_id
         self.invited_by = invited_by
-        if description:
-            self.description = description
-        else:
-            self.description = "Join us!"
 
 
 class Permission(db.Model):

@@ -2,10 +2,8 @@ import React, {useCallback, useState} from 'react';
 import {
     View,
     FlatList,
-    StyleSheet,
     TouchableOpacity,
-    UIManager,
-    Platform, Modal, Animated, ScrollView,
+    Modal,
 } from 'react-native';
 import {Button, Text, Card, Appbar, useTheme, TextInput} from 'react-native-paper';
 import {useQuery} from '@tanstack/react-query';

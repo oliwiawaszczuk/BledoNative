@@ -28,3 +28,9 @@ def create_user_routes(app):
         db.session.commit()
 
         return jsonify({"message": "success"}), 200
+
+    @app.route('/api/get_all_users')
+    def get_all_users():
+        users = User.query.all()
+        users_dict = [user.to_dict() for user in users]
+        return jsonify({"users": users_dict}), 200

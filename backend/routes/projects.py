@@ -40,10 +40,28 @@ def create_projects_routes(app):
             "name": Project.query.filter_by(id=project.project_id).first().name,
             "project_description": Project.query.filter_by(id=project.project_id).first().description,
             "invited_by": project.invited_by,
-            "invite_description": project.description,
         } for project in Invited_person_to_project.query.filter_by(user_id=user_id).all()]
 
         return jsonify({"projects_owner": projects_owner, "projects_in": projects_in, "projects_invited": projects_invited}), 200
+
+    @app.route('/api/invite_user_to_project/<project_id>/<email_to_invite>/<token>')
+    def invite_user_to_project(project_id, email_to_invite, token):
+        user = User.query.filter_by(email=email_to_invite).first()
+        invited_by = User.query.filter_by(id=Session.query.filter_by(token=token).first().user_id).first().username
+        invite = Invited_person_to_project(user.id, project_id, invited_by)
+        if invite:
+            db.session.add(invite)
+            db.session.commit()
+            return jsonify({}), 200
+
+    @app.route('/api/remove_invite_to_project/<project_id>/<email_to_invite>')
+    def remove_invite_to_project(project_id, email_to_invite):
+        user = User.query.filter_by(email=email_to_invite).first()
+        invite = Invited_person_to_project.query.filter_by(project_id=project_id, user_id=user.id).first()
+        if invite:
+            db.session.delete(invite)
+            db.session.commit()
+            return jsonify({}), 200
 
     @app.route('/api/accept_invitation_to_project/<id>')
     def accept_invitation_to_project(id):
@@ -121,4 +139,10 @@ def create_projects_routes(app):
         users_id.append(project.creator_user_id)
         user_dict = [User.query.filter_by(id=user_id).first().to_dict() for user_id in users_id]
 
-        return jsonify({"users": user_dict}), 200
+        invited_users_id = [user.user_id for user in Invited_person_to_project.query.filter_by(project_id=project_id).all()]
+        invited_users_dict = [User.query.filter_by(id=user_id).first().to_dict() for user_id in invited_users_id]
+
+        rest_users_id = [user.id for user in User.query.all() if user.id not in users_id and user.id not in invited_users_id]
+        rest_users = [User.query.filter_by(id=user_id).first().to_dict() for user_id in rest_users_id]
+
+        return jsonify({"users": user_dict, "restUsers": rest_users, "invitedUsers": invited_users_dict}), 200

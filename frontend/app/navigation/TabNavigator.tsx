@@ -7,6 +7,8 @@ import {storage} from "../../api/store";
 import ProjectsScreen from "../screens/ProjectsScreen";
 import ProjectScreen from "../screens/ProjectScreen";
 import { Ionicons } from '@expo/vector-icons';
+import {UsersScreen} from "../screens/UsersScreen";
+import UserScreen from "../screens/UserScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +43,18 @@ export function Login_Navigator() {
                     ),
                 }}
             />
+            <Tab.Screen
+                name="Users"
+                component={UsersScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="people" color={color} size={size} />
+                    ),
+                }}
+            />
             <Tab.Screen name="Project" component={ProjectScreen}  options={{ tabBarButton: () => null, headerShown: false}}/>
+            <Tab.Screen name="User" component={UserScreen}  options={{ tabBarButton: () => null, headerShown: false}}/>
         </Tab.Navigator>
     );
 }
