@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {View, TouchableOpacity, FlatList, Image} from "react-native";
-import {Text, TextInput, Title} from "react-native-paper";
+import {Button, Text, TextInput, Title} from "react-native-paper";
 import {MaterialIcons} from "@expo/vector-icons";
 import {styles} from "../../../assets/styles";
 import {storage} from "../../../api/store";
 
-export const Users = ({projectId, permissions}) => {
+export const Users = ({projectId, permissions, navigation}) => {
     const token = storage((state) => state.token);
     const [expandedUserId, setExpandedUserId] = useState(null);
     const [searchText, setSearchText] = useState('');
@@ -70,6 +70,10 @@ export const Users = ({projectId, permissions}) => {
         setExpandedUserId(expandedUserId === email ? null : email);
     };
 
+    function goToProfileUser(email) {
+        navigation.navigate('User', {email: email})
+    }
+
     return (
         <View>
             <View style={styles.searchContainer}>
@@ -111,6 +115,8 @@ export const Users = ({projectId, permissions}) => {
                                     style={{fontWeight: 'bold'}}>Position:</Text> {user.position}</Text>
                                 <Text style={styles.detailText2}><Text
                                     style={{fontWeight: 'bold'}}>Description:</Text> {user.description}</Text>
+                                <Button mode="contained" onPress={() => goToProfileUser(user.email)}>View
+                                    Profile</Button>
                             </View>
                         )}
                     </TouchableOpacity>
@@ -140,6 +146,8 @@ export const Users = ({projectId, permissions}) => {
                                             style={{fontWeight: 'bold'}}>Position:</Text> {user.position}</Text>
                                         <Text style={styles.detailText2}><Text
                                             style={{fontWeight: 'bold'}}>Description:</Text> {user.description}</Text>
+                                        <Button mode="contained" onPress={() => goToProfileUser(user.email)}>View
+                                            Profile</Button>
                                     </View>
                                 )}
                             </TouchableOpacity>
@@ -169,6 +177,8 @@ export const Users = ({projectId, permissions}) => {
                                             style={{fontWeight: 'bold'}}>Position:</Text> {user.position}</Text>
                                         <Text style={styles.detailText2}><Text
                                             style={{fontWeight: 'bold'}}>Description:</Text> {user.description}</Text>
+                                        <Button mode="contained" onPress={() => goToProfileUser(user.email)}>View
+                                            Profile</Button>
                                     </View>
                                 )}
                             </TouchableOpacity>

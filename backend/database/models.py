@@ -14,6 +14,7 @@ class User(db.Model):
     img_path = db.Column(db.String(80), nullable=True)
     description = db.Column(db.String(256), nullable=True)
     position = db.Column(db.String(120), nullable=True)
+    date_of_creation = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, username, email, password):
         self.username = username
@@ -22,6 +23,7 @@ class User(db.Model):
         self.img_path = 'default.png'
         self.description = ''
         self.position = ''
+        self.date_of_creation = datetime.now()
 
     def to_dict(self):
         return {
@@ -29,7 +31,8 @@ class User(db.Model):
             'email': self.email,
             'img_path': self.img_path,
             'description': self.description,
-            'position': self.position
+            'position': self.position,
+            'date_of_creation': self.date_of_creation,
         }
 
 
@@ -63,12 +66,14 @@ class Project(db.Model):
     # people_in_projekt = db.Column(JSON, nullable=True)
     # invited_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     sort_order = db.Column(db.Integer, nullable=False)
+    date_of_creation = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, name, description, creator_user_id, sort_order):
         self.name = name
         self.description = description
         self.creator_user_id = creator_user_id
         self.sort_order = sort_order
+        self.date_of_creation = datetime.now()
 
 
 class Person_in_project(db.Model):
@@ -78,12 +83,14 @@ class Person_in_project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'))
     sort_order = db.Column(db.Integer, nullable=False)
+    date_of_join = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, project_id, user_id, permission_id, sort_order):
         self.project_id = project_id
         self.user_id = user_id
         self.permission_id = permission_id
         self.sort_order = sort_order
+        self.date_of_join = datetime.now()
 
 
 class Invited_person_to_project(db.Model):

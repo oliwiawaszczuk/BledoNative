@@ -18,7 +18,7 @@ export default function HomeScreen({navigation}) {
             try {
                 const response = await fetch(`http://192.168.1.191:5000/api/get_user_details/${token}`);
                 const data = await response.json();
-                setUserDetails(data['user'])
+                setUserDetails(data['user']);
             } catch (e) {
 
             }

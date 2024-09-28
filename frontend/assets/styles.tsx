@@ -396,4 +396,43 @@ export const styles = StyleSheet.create({
         borderColor: '#666680',
         borderWidth: 2,
     },
+    userDetailsContainer: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: "#f5f6fa",
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "#34495e",
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    divider: {
+        marginVertical: 10,
+        backgroundColor: "#b2bec3",
+        height: 2,
+    },
+    detailRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#dfe6e9",
+        flexWrap: "wrap",
+        alignItems: "flex-start"
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#636e72",
+        flex: 1,
+    },
+    value: {
+        fontSize: 16,
+        color: "#2d3436",
+        textAlign: "right",
+        flex: 2,
+        flexWrap: 'wrap',
+    },
 });

@@ -38,7 +38,7 @@ def create_login_routes(app):
             return jsonify({"statusText": "password is wrong, try again"}), 401
 
         token = create_session(user.id, notification_token)
-        print("zalogowano z tokenem: ", token)
+        print("Login with token: ", token)
         return jsonify({"statusText": "success", "token": token}), 200
 
     @app.route('/api/register/', methods=['POST'])
@@ -58,7 +58,7 @@ def create_login_routes(app):
         db.session.commit()
 
         token = create_session(new_user.id, notification_token)
-        print("zalogowano z tokenem: ", token)
+        print("Login with token: ", token)
 
         return jsonify({"statusText": "success", "token": token}), 200
 
@@ -70,5 +70,5 @@ def create_login_routes(app):
         if session:
             db.session.delete(session)
             db.session.commit()
-            print("wylogowano z tokenam:", token)
+            print("Logout with token:", token)
         return jsonify({"statusText": "logout successful"}), 200

@@ -18,7 +18,7 @@ interface Project {
     // people: List<Person>
 }
 
-const ProjectScreen = ({route}) => {
+const ProjectScreen = ({route, navigation}) => {
     const { projectId } = route.params;
     const [currentPage, setCurrentPage] = useState<"dashboard" | "users" | "tasks" | "calendar" | "reports" | "settings">("dashboard")
     const token = storage((state) => state.token);
@@ -55,7 +55,7 @@ const ProjectScreen = ({route}) => {
             </View>
             <View style={{'flex': 1}}>
                 {currentPage === "dashboard" && <Dashboard/>}
-                {currentPage === "users" && <Users projectId={projectId} permissions={permissions}/>}
+                {currentPage === "users" && <Users navigation={navigation} projectId={projectId} permissions={permissions}/>}
                 {currentPage === "tasks" && <Tasks/>}
                 {currentPage === "calendar" && <Calendar/>}
                 {currentPage === "reports" && <Reports/>}
