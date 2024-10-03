@@ -7,8 +7,9 @@ import {storage} from "../../api/store";
 import Logout from "./Logout";
 
 export const HiUser = ({userDetails}) => {
+    const api_host = storage((state) => state.api_host);
     const token = storage((state) => state.token);
-    const avatar_path = `http://192.168.1.191:8081/assets/images/${userDetails['img_path']}`;
+    const avatar_path = `${api_host.slice(0, -3)}/static/images/${userDetails['img_path']}`;
 
     const [isVisibleDetails, setIsVisibleDetails] = useState(false);
     const toggleVisibility = () => {
@@ -64,7 +65,7 @@ export const HiUser = ({userDetails}) => {
 
     const change_user_info = async () => {
         try {
-            const response = await fetch(`http://192.168.1.191:5000/api/change_user_info/${token}`, {
+            const response = await fetch(`${api_host}/change_user_info/${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

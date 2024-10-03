@@ -63,8 +63,7 @@ class Project(db.Model):
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(256), nullable=True)
     creator_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # people_in_projekt = db.Column(JSON, nullable=True)
-    # invited_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    position_creator_in_project = db.Column(db.String(120), nullable=True)
     sort_order = db.Column(db.Integer, nullable=False)
     date_of_creation = db.Column(db.DateTime, nullable=True)
 
@@ -74,6 +73,7 @@ class Project(db.Model):
         self.creator_user_id = creator_user_id
         self.sort_order = sort_order
         self.date_of_creation = datetime.now()
+        self.position_creator_in_project = "creator"
 
 
 class Person_in_project(db.Model):
@@ -83,6 +83,7 @@ class Person_in_project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'))
     sort_order = db.Column(db.Integer, nullable=False)
+    position_in_project = db.Column(db.String(120), nullable=True)
     date_of_join = db.Column(db.DateTime, nullable=True)
 
     def __init__(self, project_id, user_id, permission_id, sort_order):
@@ -91,6 +92,7 @@ class Person_in_project(db.Model):
         self.permission_id = permission_id
         self.sort_order = sort_order
         self.date_of_join = datetime.now()
+        self.position_in_project = ''
 
 
 class Invited_person_to_project(db.Model):
@@ -114,6 +116,7 @@ class Permission(db.Model):
     can_kick_people = db.Column(db.Boolean, nullable=False, default=False)
     can_add_events = db.Column(db.Boolean, nullable=False, default=False)
     can_edit_settings_project = db.Column(db.Boolean, nullable=False, default=False)
+    can = db.Column(db.Boolean, nullable=False, default=False)
 
     def __init__(self):
         self.can_add_users = False
@@ -130,8 +133,12 @@ class Permission(db.Model):
         self.can_edit_settings_project = True
         return self
 
-    def set_as_viewer(self):
-        pass
+    def set_custom_permission(self, permission):
+        self.can_add_users = permission["can_add_users"]
+        self.can_edit_details_about_users = permission["can_edit_details_about_users"]
+        self.can_kick_people = permission["can_kick_people"]
+        self.can_add_events = permission["can_add_events"]
+        self.can_edit_settings_project = permission["can_edit_settings_project"]
 
     def to_dict(self):
         return {

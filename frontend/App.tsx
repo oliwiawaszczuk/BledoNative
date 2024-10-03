@@ -5,12 +5,13 @@ import {View, Text, Platform, UIManager} from "react-native";
 import React, {useCallback, useEffect} from "react";
 import {registerForPushNotificationsAsync} from "./api/notification";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {Loading} from "./app/components/Loading";
 
 const queryClient = new QueryClient();
 
-const auto_login = async (token: string, login, setLoginState) => {
+const auto_login = async (token: string, login, setLoginState, api_host) => {
     try {
-        const response = await fetch('http://192.168.1.191:5000/api/auto_login', {
+        const response = await fetch(`${api_host}/auto_login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,6 +40,7 @@ if (Platform.OS === 'android') {
 }
 
 export default function App() {
+    const api_host = storage((state) => state.api_host);
     const loginState = storage((state) => state.loginState);
     const setLoginState = storage((state) => state.setLoginState);
     const setError = storage((state) => state.setError);
@@ -48,8 +50,8 @@ export default function App() {
 
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => setNotificationToken(token));
-
-        auto_login(token, login, setLoginState)
+        if (api_host)
+            auto_login(token, login, setLoginState, api_host)
     }, [token]);
 
     useEffect(() => {
@@ -66,13 +68,8 @@ export default function App() {
         return () => clearTimeout(timer);
     }, [loginState]);
 
-    if (loginState === "logging") {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Loading...</Text>
-            </View>
-        );
-    }
+    if (api_host === null || loginState === "logging" || loginState === "checking-autologin")
+        <Loading/>
 
     return (
         <QueryClientProvider client={queryClient}>

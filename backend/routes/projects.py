@@ -136,13 +136,64 @@ def create_projects_routes(app):
     def get_all_users_for_project_id(project_id):
         project = Project.query.filter_by(id=project_id).first()
         users_id = [project.user_id for project in Person_in_project.query.filter_by(project_id=project_id).all()]
-        users_id.append(project.creator_user_id)
-        user_dict = [User.query.filter_by(id=user_id).first().to_dict() for user_id in users_id]
+        users_dict = []
+        for user_id in users_id:
+            user_dict = User.query.filter_by(id=user_id).first().to_dict()
+            person_in_project = Person_in_project.query.filter_by(project_id=project.id, user_id=user_id).first()
+            if person_in_project:
+                user_dict["position_in_project"] = person_in_project.position_in_project
+                user_dict["date_of_join"] = person_in_project.date_of_join
 
+            users_dict.append(user_dict)
+
+        creator_dict = User.query.filter_by(id=project.creator_user_id).first().to_dict()
+        creator_dict["position_in_project"] = project.position_creator_in_project
+        creator_dict["date_of_join"] = project.date_of_creation
+
+        users_id.append(project.creator_user_id)
         invited_users_id = [user.user_id for user in Invited_person_to_project.query.filter_by(project_id=project_id).all()]
         invited_users_dict = [User.query.filter_by(id=user_id).first().to_dict() for user_id in invited_users_id]
 
         rest_users_id = [user.id for user in User.query.all() if user.id not in users_id and user.id not in invited_users_id]
         rest_users = [User.query.filter_by(id=user_id).first().to_dict() for user_id in rest_users_id]
 
-        return jsonify({"users": user_dict, "restUsers": rest_users, "invitedUsers": invited_users_dict}), 200
+        return jsonify({"creatorUser": creator_dict, "users": users_dict, "restUsers": rest_users, "invitedUsers": invited_users_dict}), 200
+
+    @app.route('/api/change_user_position_in_project', methods=['POST'])
+    def change_user_position_in_project():
+        data = request.get_json()
+        new_position = data.get('new_position')
+        email = data.get('email')
+        project_id = data.get('project_id')
+        user_id = User.query.filter_by(email=email).first().id
+
+        project = Person_in_project.query.filter_by(user_id=user_id, project_id=project_id).first()
+        if project is None:
+            project.position_in_project = new_position
+            db.session.commit()
+
+        return jsonify({}), 200
+
+    @app.route('/api/change_user_permissions_in_project', methods=['POST'])
+    def change_user_permissions_in_project():
+        data = request.get_json()
+        email = data.get('email')
+        project_id = data.get('projectId')
+        new_permission = data.get('permissions')
+        user_id = User.query.filter_by(email=email).first().id
+        project = Person_in_project.query.filter_by(user_id=user_id, project_id=project_id).first()
+        permission = Permission.query.filter_by(id=project.permission_id).first()
+
+        permission.set_custom_permission(new_permission)
+        db.session.commit()
+
+        return jsonify({}), 200
+
+    @app.route('/api/get_permission_for_user_in_project/<email>/<project_id>')
+    def get_permission_for_user_in_project(email, project_id):
+        user = User.query.filter_by(email=email).first()
+        project = Person_in_project.query.filter_by(project_id=project_id, user_id=user.id).first()
+        permission = Permission.query.filter_by(id=project.permission_id).first()
+
+        return jsonify({"permission": permission.to_dict()}), 200
+

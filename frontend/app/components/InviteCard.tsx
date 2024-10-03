@@ -2,16 +2,18 @@ import React, {useState} from "react";
 import {Animated, LayoutAnimation, StyleSheet, TouchableOpacity, View} from "react-native";
 import {Card, IconButton, Text} from "react-native-paper";
 import { MaterialIcons } from '@expo/vector-icons';
+import {storage} from "../../api/store";
 
-function AcceptInvitation(id: number) {
-    fetch(`http://192.168.1.191:5000/api/accept_invitation_to_project/${id}`)
+function AcceptInvitation(id: number, api_host: string) {
+    fetch(`${api_host}/accept_invitation_to_project/${id}`)
 }
 
-function RejectInvitation(id: number) {
-    fetch(`http://192.168.1.191:5000/api/reject_invitation_to_project/${id}`)
+function RejectInvitation(id: number, api_host: string) {
+    fetch(`${api_host}/reject_invitation_to_project/${id}`)
 }
 
 export function InviteCard({ item, refetch }) {
+    const api_host = storage((state) => state.api_host);
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleVisibility = () => {
@@ -39,7 +41,7 @@ export function InviteCard({ item, refetch }) {
                         <TouchableOpacity
                             style={styles.acceptButton}
                             onPress={() => {
-                                AcceptInvitation(item.id);
+                                AcceptInvitation(item.id, api_host);
                                 refetch();
                             }}>
                             <MaterialIcons name="check-circle-outline" size={26} color="#4CAF50" />
@@ -48,7 +50,7 @@ export function InviteCard({ item, refetch }) {
                         <TouchableOpacity
                             style={styles.rejectButton}
                             onPress={() => {
-                                RejectInvitation(item.id);
+                                RejectInvitation(item.id, api_host);
                                 refetch();
                             }}>
                             <MaterialIcons name="cancel" size={26} color="#F44336" />

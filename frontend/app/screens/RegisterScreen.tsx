@@ -9,6 +9,7 @@ export default function RegisterScreen({navigation}) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const api_host = storage((state) => state.api_host);
     const setError = storage((state) => state.setError);
     const error = storage((state) => state.error);
     const login = storage((state) => state.login);
@@ -28,7 +29,7 @@ export default function RegisterScreen({navigation}) {
         setLoginState("logging");
 
         try {
-            const response = await fetch('http://192.168.1.191:5000/api/register', {
+            const response = await fetch(`${api_host}/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

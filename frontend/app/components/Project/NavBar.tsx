@@ -26,10 +26,6 @@ export const NavBar = ({setCurrentPage, currentPage, permissions}) => {
             toggleVisibility()
     }, [currentPage]);
 
-    useEffect(() => {
-        console.log(permissions)
-    }, []);
-
     return (
         <View style={styles.navBarContainer}>
             <TouchableOpacity

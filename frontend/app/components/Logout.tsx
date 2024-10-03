@@ -5,13 +5,14 @@ import {storage} from "../../api/store";
 
 export default function Logout() {
     const logout = storage((state) => state.logout);
+    const api_host = storage((state) => state.api_host);
     const token = storage((state) => state.token);
     const setError = storage((state) => state.setError);
     const setLoginState = storage((state) => state.setLoginState);
 
     const logoutHandle = useCallback( async () => {
         try {
-            const response = await fetch('http://192.168.1.191:5000/api/logout', {
+            const response = await fetch(`${api_host}/logout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

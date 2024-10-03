@@ -15,9 +15,10 @@ import {styles} from "../../assets/styles";
 export default function ProjectsScreen({navigation}) {
     const [selectedTab, setSelectedTab] = useState('owner');
     const token = storage((state) => state.token);
+    const api_host = storage((state) => state.api_host);
 
     const {data: projects, refetch} = useQuery({
-        queryFn: () => fetch(`http://192.168.1.191:5000/api/get_projects/${token}`)
+        queryFn: () => fetch(`${api_host}/get_projects/${token}`)
             .then(response => response.json()),
         queryKey: ['projects'],
     });
@@ -33,7 +34,7 @@ export default function ProjectsScreen({navigation}) {
     const [newProjectDescription, setNewProjectDescription] = useState('');
 
     const handleAddProject = useCallback(async () => {
-        const res = await fetch(`http://192.168.1.191:5000/api/add_new_project/${token}`, {
+        const res = await fetch(`${api_host}/add_new_project/${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

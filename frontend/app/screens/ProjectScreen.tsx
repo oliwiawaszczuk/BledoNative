@@ -10,25 +10,21 @@ import {Calendar} from "../components/Project/Calendar";
 import {Tasks} from "../components/Project/Tasks";
 import {Reports} from "../components/Project/Reports";
 import {storage} from "../../api/store";
+import {Loading} from "../components/Loading";
 
-// Project
-interface Project {
-    name: String,
-    description: String,
-    // people: List<Person>
-}
 
 const ProjectScreen = ({route, navigation}) => {
     const { projectId } = route.params;
+    const api_host = storage((state) => state.api_host);
     const [currentPage, setCurrentPage] = useState<"dashboard" | "users" | "tasks" | "calendar" | "reports" | "settings">("dashboard")
     const token = storage((state) => state.token);
     const [isLoading, setIsLoading] = useState(true);
-    const [permissions, setPermissions] = useState();
+    const [permissions, setPermissions] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.1.191:5000/api/get_project_details/${projectId}/${token}`);
+                const response = await fetch(`${api_host}/get_project_details/${projectId}/${token}`);
                 const data = await response.json();
                 setPermissions(data['permissions']);
                 setCurrentPage('dashboard');
@@ -40,18 +36,13 @@ const ProjectScreen = ({route, navigation}) => {
         fetchData();
     }, [projectId, token]);
 
-    if (isLoading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <Text style={styles.loadingText}>Loading...</Text>
-            </View>
-        );
-    }
+    if (isLoading || !permissions)
+        <Loading/>
 
     return (
         <View style={styles.container2}>
             <View>
-                <NavBar currentPage={currentPage} setCurrentPage={setCurrentPage} permissions={permissions}/>
+                {permissions && <NavBar currentPage={currentPage} setCurrentPage={setCurrentPage} permissions={permissions}/>}
             </View>
             <View style={{'flex': 1}}>
                 {currentPage === "dashboard" && <Dashboard/>}

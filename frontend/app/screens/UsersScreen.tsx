@@ -7,13 +7,14 @@ import {styles} from "../../assets/styles";
 
 export const UsersScreen = ({navigation}) => {
     const token = storage((state) => state.token);
+    const api_host = storage((state) => state.api_host);
     const [searchText, setSearchText] = useState('');
     const [allUsers, setAllUsers] = useState([]);
 
 
     const fetchAllUsers = async () => {
         try {
-            const response = await fetch(`http://192.168.1.191:5000/api/get_all_users`);
+            const response = await fetch(`${api_host}/get_all_users`);
             const data = await response.json();
             setSearchText("");
             setAllUsers(data["users"]);

@@ -1,35 +1,35 @@
 import {Animated, TouchableOpacity, View} from "react-native";
-import {Caption, Divider, Text, Title} from "react-native-paper";
+import {ActivityIndicator, Caption, Divider, Text, Title} from "react-native-paper";
 import React, {useEffect, useState} from "react";
 import {styles} from "../../assets/styles";
 import ScrollView = Animated.ScrollView;
 import { useNavigation } from '@react-navigation/native';
 import {MaterialIcons} from "@expo/vector-icons";
+import {storage} from "../../api/store";
+import {Loading} from "../components/Loading";
 
 export default function UserScreen({route}) {
     const {email} = route.params;
+    const api_host = storage((state) => state.api_host);
     const [userDetails, setUserDetails] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.1.191:5000/api/get_user_details_by_email/${email}`);
+                const response = await fetch(`${api_host}/get_user_details_by_email/${email}`);
                 const data = await response.json();
-                setUserDetails(data['user'])
-            } catch (e) {
+                setUserDetails(data['user']);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchData();
     }, [email]);
 
-    if (!userDetails) {
-        return (
-            <View style={styles.loadingContainer}>
-                <Text style={styles.loadingText}>Loading...</Text>
-            </View>
-        );
-    }
+    if (isLoading)
+        <Loading/>
 
     return (
         <ScrollView style={styles.userDetailsContainer}>

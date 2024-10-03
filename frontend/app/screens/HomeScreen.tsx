@@ -9,6 +9,7 @@ import {HiUser} from "../components/HiUser";
 
 export default function HomeScreen({navigation}) {
     const token = storage((state) => state.token);
+    const api_host = storage((state) => state.api_host);
     const notificationToken = storage((state) => state.notificationToken);
     // const [isLoading, setIsLoading] = useState(true);
     const [userDetails, setUserDetails] = useState(null);
@@ -16,7 +17,7 @@ export default function HomeScreen({navigation}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.1.191:5000/api/get_user_details/${token}`);
+                const response = await fetch(`${api_host}/get_user_details/${token}`);
                 const data = await response.json();
                 setUserDetails(data['user']);
             } catch (e) {

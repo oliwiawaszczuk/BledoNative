@@ -1,6 +1,91 @@
 import {StyleSheet} from "react-native";
 
 export const styles = StyleSheet.create({
+    container3: {
+        padding: 16,
+        backgroundColor: "#f9f9f9",
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: 16,
+    },
+    usersContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        marginBottom: 24,
+    },
+    userCard: {
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 16,
+        width: "100%",
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowOffset: {width: 0, height: 2},
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    userRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    avatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 12,
+    },
+    userText: {
+        fontSize: 16,
+        color: "#333",
+        flex: 1,
+        flexWrap: "wrap",
+    },
+    removeButton: {
+        backgroundColor: "#e74c3c",
+        padding: 4,
+        borderRadius: 4,
+    },
+    addButtonUsersInProject: {
+        backgroundColor: "#2ecc71",
+        padding: 4,
+        borderRadius: 4,
+    },
+    userDetails: {
+        marginTop: 8,
+        backgroundColor: "#f0f0f0",
+        padding: 8,
+        borderRadius: 8,
+    },
+    detailText: {
+        fontSize: 14,
+        color: "#333",
+        marginBottom: 4,
+    },
+    boldText: {
+        fontWeight: "bold",
+    },
+    viewProfileButton: {
+        marginTop: 8,
+        backgroundColor: "#3498db",
+        borderRadius: 4,
+        flexShrink: 1,
+        flex: 1,
+    },
+    viewProfileButtonText: {
+        fontSize: 14,
+        textAlign: "center",
+        flexWrap: "wrap",
+    },
+    invitedUserCard: {
+        borderColor: "#95a5a6",
+        borderWidth: 1,
+    },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -294,11 +379,6 @@ export const styles = StyleSheet.create({
         color: '#4b3a77',
         marginTop: 10,
     },
-    detailText: {
-        fontSize: 14,
-        color: '#555',
-        marginBottom: 8,
-    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -324,48 +404,6 @@ export const styles = StyleSheet.create({
         padding: 8,
         marginRight: 5,
     },
-    usersContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    userCard: {
-        backgroundColor: '#f3e5f5',
-        padding: 12,
-        margin: 5,
-        borderRadius: 12,
-        alignItems: 'flex-start',
-        shadowColor: "#000",
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 2,
-    },
-    userRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-    },
-    avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginRight: 10,
-    },
-    userText: {
-        fontSize: 22,
-        fontWeight: '800',
-        color: '#413267',
-    },
-    removeButton: {
-        backgroundColor: '#c85051',
-        borderRadius: 8,
-        padding: 6,
-        alignItems: 'center',
-        marginLeft: 16,
-    },
     addButton2: {
         backgroundColor: '#71cfc0',
         borderRadius: 8,
@@ -373,17 +411,10 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 16,
     },
-    userDetails: {
-        marginTop: 10,
-        paddingLeft: 50,
-    },
     detailText2: {
         fontSize: 14,
         color: '#555',
         marginBottom: 5,
-    },
-    invitedUserCard: {
-        backgroundColor: '#a29fa4',
     },
     userContainer: {
         flexDirection: 'row',
@@ -434,5 +465,14 @@ export const styles = StyleSheet.create({
         textAlign: "right",
         flex: 2,
         flexWrap: 'wrap',
+    },
+    settingsButton: {
+        backgroundColor: 'gray',
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        marginLeft: 8,
     },
 });

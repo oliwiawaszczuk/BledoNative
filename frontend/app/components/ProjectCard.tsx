@@ -3,8 +3,10 @@ import {Card, Text} from "react-native-paper";
 import React, {useState, useRef, useCallback} from "react";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from "../../assets/styles";
+import {storage} from "../../api/store";
 
 export const ProjectCard = ({item, handleCardPress, refetch}) => {
+    const api_host = storage((state) => state.api_host);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalPosition, setModalPosition] = useState({x: 0, y: 0}); // Pozycja modala
     const iconRef = useRef();
@@ -18,13 +20,13 @@ export const ProjectCard = ({item, handleCardPress, refetch}) => {
 
     const MoveUp = useCallback(async () => {
         setIsModalVisible(!isModalVisible);
-        const res = await fetch(`http://192.168.1.191:5000/api/try_move_card/${item.id}/up`)
+        const res = await fetch(`${api_host}/try_move_card/${item.id}/up`)
         if (res.ok) refetch()
     }, [isModalVisible, refetch, item]);
 
     const MoveDown = useCallback(async () => {
         setIsModalVisible(!isModalVisible);
-        const res = await fetch(`http://192.168.1.191:5000/api/try_move_card/${item.id}/down`)
+        const res = await fetch(`${api_host}/try_move_card/${item.id}/down`)
         if (res.ok) refetch()
     }, [isModalVisible, refetch, item]);
 

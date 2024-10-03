@@ -7,13 +7,14 @@ export default function LoginScreen({navigation}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const api_host = storage((state) => state.api_host);
     const login = storage((state) => state.login);
     const setLoginState = storage((state) => state.setLoginState);
     const setError = storage((state) => state.setError);
     const error = storage((state) => state.error);
     const notificationToken = storage((state) => state.notificationToken);
 
-    const loginHangle = useCallback( async () => {
+    const loginHandle = useCallback( async () => {
         if (email.trim() == '' || password.trim() == '') {
             setError("Fields cannot be empty!");
             return;
@@ -22,7 +23,7 @@ export default function LoginScreen({navigation}) {
         setLoginState("logging");
 
         try {
-            const response = await fetch('http://192.168.1.191:5000/api/login', {
+            const response = await fetch(`${api_host}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export default function LoginScreen({navigation}) {
                         value={password}
                     />
                     <Text>{error}</Text>
-                    <Button mode="contained" style={styles.button} onPress={loginHangle}>
+                    <Button mode="contained" style={styles.button} onPress={loginHandle}>
                         Log In
                     </Button>
                     <Button onPress={() => {
