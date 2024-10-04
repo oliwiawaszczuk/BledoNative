@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {View, TouchableOpacity, FlatList, Image, Animated} from "react-native";
 import {Button, Text, TextInput, Title} from "react-native-paper";
 import {MaterialIcons} from "@expo/vector-icons";
@@ -7,6 +7,8 @@ import {storage} from "../../../api/store";
 import ScrollView = Animated.ScrollView;
 import {log} from "expo/build/devtools/logger";
 import {PermissionModal} from "./PermissionModal";
+import {Loading} from "../Loading";
+import {projectContent} from "../../screens/ProjectScreen";
 
 
 function UserInProjectDetails({user, goToProfileUser}) {
@@ -22,9 +24,11 @@ function UserInProjectDetails({user, goToProfileUser}) {
     );
 }
 
-export const Users = ({projectId, permissions, navigation}) => {
+export const Users = ({navigation}) => {
+    const {projectId, permissions} = useContext(projectContent);
     const api_host = storage((state) => state.api_host);
     const token = storage((state) => state.token);
+    const [isLoading, setIsLoading] = useState(true);
     const [expandedUserId, setExpandedUserId] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [allUsers, setAllUsers] = useState([]);
@@ -68,7 +72,8 @@ export const Users = ({projectId, permissions, navigation}) => {
             setRestUsers(data["restUsers"]);
             setInvitedUsers(data["invitedUsers"]);
             setCreatorUser(data["creatorUser"]);
-        } catch (e) {
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -106,6 +111,9 @@ export const Users = ({projectId, permissions, navigation}) => {
         } catch (e) {
         }
     }
+
+    if (isLoading)
+        return <Loading/>
 
     return (
         <View>

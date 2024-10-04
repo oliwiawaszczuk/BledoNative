@@ -11,17 +11,21 @@ import {storage} from '../../api/store';
 import {InviteCard} from "../components/InviteCard";
 import {ProjectCard} from "../components/ProjectCard";
 import {styles} from "../../assets/styles";
+import {Loading} from "../components/Loading";
 
 export default function ProjectsScreen({navigation}) {
     const [selectedTab, setSelectedTab] = useState('owner');
     const token = storage((state) => state.token);
     const api_host = storage((state) => state.api_host);
 
-    const {data: projects, refetch} = useQuery({
-        queryFn: () => fetch(`${api_host}/get_projects/${token}`)
-            .then(response => response.json()),
+    const {data: projects, isLoading, refetch} = useQuery({
+        queryFn: () => fetch(`${api_host}/get_projects/${token}`).then(response => response.json()),
         queryKey: ['projects'],
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+        retry: 1,
     });
+
 
     const projectsOwner = projects?.projects_owner || [];
 
@@ -52,6 +56,9 @@ export default function ProjectsScreen({navigation}) {
     const handleCardPress = (id) => {
         navigation.navigate('Project', {projectId: id})
     };
+
+    if (isLoading)
+        return <Loading/>
 
     return (
         <View style={styles.container}>

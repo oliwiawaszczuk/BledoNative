@@ -1,11 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import {View} from "react-native";
 import {Text} from "react-native-paper";
+import {projectContent} from "../../screens/ProjectScreen";
 
 export const Dashboard = () => {
+    const {projectId, permissions} = useContext(projectContent);
     return (
         <View>
-            <Text>Dashboard</Text>
+            <Text>Dashboard {projectId}</Text>
         </View>
     );
 }

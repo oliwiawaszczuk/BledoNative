@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {createContext, useEffect, useState} from "react";
 import {View, Text} from "react-native";
 import {useQuery} from "@tanstack/react-query";
 import {NavBar} from "../components/Project/NavBar";
@@ -12,47 +12,40 @@ import {Reports} from "../components/Project/Reports";
 import {storage} from "../../api/store";
 import {Loading} from "../components/Loading";
 
+export const projectContent = createContext(null);
 
 const ProjectScreen = ({route, navigation}) => {
     const { projectId } = route.params;
     const api_host = storage((state) => state.api_host);
     const [currentPage, setCurrentPage] = useState<"dashboard" | "users" | "tasks" | "calendar" | "reports" | "settings">("dashboard")
     const token = storage((state) => state.token);
-    const [isLoading, setIsLoading] = useState(true);
-    const [permissions, setPermissions] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${api_host}/get_project_details/${projectId}/${token}`);
-                const data = await response.json();
-                setPermissions(data['permissions']);
-                setCurrentPage('dashboard');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const {data, isLoading, refetch} = useQuery({
+        queryFn: () => fetch(`${api_host}/get_project_details/${projectId}/${token}`).then(response => response.json()),
+        queryKey: ['projectDetails', projectId, token],
+    });
 
-        fetchData();
-    }, [projectId, token]);
+    if (isLoading)
+        return <Loading/>
 
-    if (isLoading || !permissions)
-        <Loading/>
+    const permissions = data["permissions"];
 
     return (
-        <View style={styles.container2}>
-            <View>
-                {permissions && <NavBar currentPage={currentPage} setCurrentPage={setCurrentPage} permissions={permissions}/>}
+        <projectContent.Provider value={{projectId, permissions}}>
+            <View style={styles.container2}>
+                <View>
+                    <NavBar currentPage={currentPage} setCurrentPage={setCurrentPage} permissions={permissions}/>
+                </View>
+                <View style={{'flex': 1}}>
+                    {currentPage === "dashboard" && <Dashboard/>}
+                    {currentPage === "users" && <Users navigation={navigation}/>}
+                    {currentPage === "tasks" && <Tasks/>}
+                    {currentPage === "calendar" && <Calendar/>}
+                    {currentPage === "reports" && <Reports/>}
+                    {currentPage === "settings" && <Settings/>}
+                </View>
             </View>
-            <View style={{'flex': 1}}>
-                {currentPage === "dashboard" && <Dashboard/>}
-                {currentPage === "users" && <Users navigation={navigation} projectId={projectId} permissions={permissions}/>}
-                {currentPage === "tasks" && <Tasks/>}
-                {currentPage === "calendar" && <Calendar/>}
-                {currentPage === "reports" && <Reports/>}
-                {currentPage === "settings" && <Settings/>}
-            </View>
-        </View>
+        </projectContent.Provider>
     );
 };
 

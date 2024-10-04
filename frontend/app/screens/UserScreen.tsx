@@ -29,7 +29,7 @@ export default function UserScreen({route}) {
     }, [email]);
 
     if (isLoading)
-        <Loading/>
+        return <Loading/>
 
     return (
         <ScrollView style={styles.userDetailsContainer}>
