@@ -162,13 +162,13 @@ def create_projects_routes(app):
     @app.route('/api/change_user_position_in_project', methods=['POST'])
     def change_user_position_in_project():
         data = request.get_json()
-        new_position = data.get('new_position')
+        new_position = data.get('position')
         email = data.get('email')
-        project_id = data.get('project_id')
+        project_id = data.get('projectId')
         user_id = User.query.filter_by(email=email).first().id
 
         project = Person_in_project.query.filter_by(user_id=user_id, project_id=project_id).first()
-        if project is None:
+        if project is not None:
             project.position_in_project = new_position
             db.session.commit()
 
@@ -183,7 +183,6 @@ def create_projects_routes(app):
         user_id = User.query.filter_by(email=email).first().id
         project = Person_in_project.query.filter_by(user_id=user_id, project_id=project_id).first()
         permission = Permission.query.filter_by(id=project.permission_id).first()
-
         permission.set_custom_permission(new_permission)
         db.session.commit()
 

@@ -1,11 +1,14 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import { View, Text, TouchableOpacity, Switch, TextInput, Modal, StyleSheet, ScrollView } from 'react-native';
+import React, {useState, useEffect, useCallback, useContext} from 'react';
+import {View, Text, TouchableOpacity, Switch, TextInput, Modal, StyleSheet, ScrollView} from 'react-native';
 import {storage} from "../../../api/store";
+import {Loading} from "../Loading";
+import {projectContent} from "../../../api/context";
 
-export const PermissionModal = ({ email, projectId, positionUser, permissionEditingUser, visible, onClose }) => {
+export const PermissionModal = ({email, positionUser, permissionEditingUser, visible, onClose}) => {
     const api_host = storage((state) => state.api_host);
+    const {projectId} = useContext(projectContent);
 
-    const [permissions, setPermissions] = useState([]);
+    const [permissions, setPermissions] = useState({});
 
     const [position, setPosition] = useState('');
 
@@ -23,27 +26,49 @@ export const PermissionModal = ({ email, projectId, positionUser, permissionEdit
         }));
     };
 
-    const onSavePosition = () => {
 
-    }
+    const onSavePosition = useCallback(async (currentPosition) => {
+        console.log("1. ", currentPosition)
+        try {
+            const response = await fetch(`${api_host}/change_user_position_in_project`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email, projectId, position: currentPosition})
+            });
 
-    const onSavePermissions = useCallback( async () => {
+            const data = await response.json()
+
+            if (response.ok) {
+                console.log("2. ", currentPosition)
+            }
+        } catch (error) {
+        }
+    }, [email, projectId])
+
+    const onSavePermissions = useCallback(async () => {
+        const updatedPermissions = permissions;
+
         try {
             const response = await fetch(`${api_host}/change_user_permissions_in_project`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({email, projectId, permissions})
+                body: JSON.stringify({email, projectId, permissions: updatedPermissions})
             });
 
             const data = await response.json()
 
-            if(response.ok) {
+            if (response.ok) {
+                console.log("Permissions successfully updated.");
             }
         } catch (error) {
+            console.error("Error saving permissions", error);
         }
-    }, [email, projectId])
+    }, [email, projectId, permissions]);
+
 
     return (
         <Modal transparent={true} visible={visible} animationType="slide">
@@ -62,26 +87,28 @@ export const PermissionModal = ({ email, projectId, positionUser, permissionEdit
                     />
                     <TouchableOpacity
                         style={styles.saveButton}
-                        onPress={() => onSavePosition()}
+                        onPress={() => onSavePosition(position)}
                     >
                         <Text style={styles.saveButtonText}>Save Position</Text>
                     </TouchableOpacity>
 
-                    <ScrollView style={styles.permissionsList}>
-                        {Object.keys(permissions).map((permission) => (
-                            <TouchableOpacity
-                                key={permission}
-                                style={styles.permissionRow}
-                                onPress={() => togglePermission(permission)}
-                            >
-                                <Text style={styles.permissionName}>{permission}</Text>
-                                <Switch
-                                    value={permissions[permission]}
-                                    onValueChange={() => togglePermission(permission)}
-                                />
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
+                    {!permissions || Object.keys(permissions).length === 0 ? <Loading/> :
+                        <ScrollView style={styles.permissionsList}>
+                            {Object.keys(permissions).map((permission) => (
+                                <TouchableOpacity
+                                    key={permission}
+                                    style={styles.permissionRow}
+                                    onPress={() => togglePermission(permission)}
+                                >
+                                    <Text style={styles.permissionName}>{permission}</Text>
+                                    <Switch
+                                        value={permissions[permission]}
+                                        onValueChange={() => togglePermission(permission)}
+                                    />
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    }
 
                     <TouchableOpacity
                         style={styles.saveButton}

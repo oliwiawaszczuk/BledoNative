@@ -10,6 +10,10 @@ import {Loading} from "./app/components/Loading";
 const queryClient = new QueryClient();
 
 const auto_login = async (token: string, login, setLoginState, api_host) => {
+    if (!token || token.trim() === '') {
+        setLoginState("not-login");
+        console.log("auto login with token: ", token, " - not success");
+    }
     try {
         const response = await fetch(`${api_host}/auto_login`, {
             method: 'POST',

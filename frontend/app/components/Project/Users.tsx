@@ -5,10 +5,9 @@ import {MaterialIcons} from "@expo/vector-icons";
 import {styles} from "../../../assets/styles";
 import {storage} from "../../../api/store";
 import ScrollView = Animated.ScrollView;
-import {log} from "expo/build/devtools/logger";
 import {PermissionModal} from "./PermissionModal";
 import {Loading} from "../Loading";
-import {projectContent} from "../../screens/ProjectScreen";
+import {projectContent} from "../../../api/context";
 
 
 function UserInProjectDetails({user, goToProfileUser}) {
@@ -24,6 +23,49 @@ function UserInProjectDetails({user, goToProfileUser}) {
     );
 }
 
+function UserCard({user, permissions, toggleUserDetails, expandedUserId, goToProfileUser, api_host, openSettings}) {
+    return (
+        <TouchableOpacity
+            key={user.email}
+            style={styles.userCard}
+            onPress={() => toggleUserDetails(user.email)}
+        >
+            <View style={styles.userRow}>
+                <Image
+                    source={{uri: `${api_host.slice(0, -3)}/static/images/${user['img_path']}`}}
+                    style={styles.avatar}
+                />
+                <Text style={styles.userText}>{user.username}</Text>
+            </View>
+            {expandedUserId === user.email && (
+                <View style={styles.userDetails}>
+                    <Text style={styles.detailText}><Text
+                        style={styles.boldText}>Position:</Text> {user.position_in_project}</Text>
+                    <Text style={styles.detailText}><Text style={styles.boldText}>Date of
+                        join:</Text> {user.date_of_join}</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}>
+                        <Button mode="contained"
+                                style={styles.viewProfileButton}
+                                onPress={() => goToProfileUser(user.email)}>
+                            View Profile
+                        </Button>
+                        {permissions.can_edit_details_about_users && (
+                            <TouchableOpacity style={styles.settingsButton}
+                                              onPress={() => openSettings(user)}>
+                                <MaterialIcons name="settings" size={20} color="white"/>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                </View>
+            )}
+        </TouchableOpacity>
+    );
+}
+
 export const Users = ({navigation}) => {
     const {projectId, permissions} = useContext(projectContent);
     const api_host = storage((state) => state.api_host);
@@ -35,7 +77,7 @@ export const Users = ({navigation}) => {
     const [restUsers, setRestUsers] = useState([]);
     const [invitedUsers, setInvitedUsers] = useState([]);
     const [creatorUser, setCreatorUser] = useState(null);
-    const [permissionEditingUser, setPermissionEditingUser] = useState(null);
+    const [permissionEditingUser, setPermissionEditingUser] = useState([]);
     const [positionEditingUser, setPositionEditingUser] = useState(null);
     const [emailEditingUser, setEmailEditingUser] = useState(null);
 
@@ -105,15 +147,23 @@ export const Users = ({navigation}) => {
         try {
             const response = await fetch(`${api_host}/get_permission_for_user_in_project/${user.email}/${projectId}`);
             const data = await response.json();
-            setPermissionEditingUser(data["permission"]);
-            setPositionEditingUser(user.position_in_project);
-            setEmailEditingUser(user.email);
+            if (response.ok) {
+                setPermissionEditingUser(data["permission"]);
+                setPositionEditingUser(user.position_in_project);
+                setEmailEditingUser(user.email);
+            }
         } catch (e) {
         }
     }
 
     if (isLoading)
         return <Loading/>
+
+    function onClose() {
+        setPositionEditingUser(null);
+        setPermissionEditingUser([]);
+        setEmailEditingUser(null);
+    }
 
     return (
         <View>
@@ -136,44 +186,9 @@ export const Users = ({navigation}) => {
                 <Title style={styles.sectionTitle}>Users in project</Title>
                 <View style={styles.usersContainer}>
                     {filteredUsers.map((user) => (
-                        <TouchableOpacity
-                            key={user.email}
-                            style={styles.userCard}
-                            onPress={() => toggleUserDetails(user.email)}
-                        >
-                            <View style={styles.userRow}>
-                                <Image
-                                    source={{uri: `${api_host.slice(0, -3)}/static/images/${user['img_path']}`}}
-                                    style={styles.avatar}
-                                />
-                                <Text style={styles.userText}>{user.username}</Text>
-                            </View>
-                            {expandedUserId === user.email && (
-                                <View style={styles.userDetails}>
-                                    <Text style={styles.detailText}><Text
-                                        style={styles.boldText}>Position:</Text> {user.position_in_project}</Text>
-                                    <Text style={styles.detailText}><Text style={styles.boldText}>Date of
-                                        join:</Text> {user.date_of_join}</Text>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between'
-                                    }}>
-                                        <Button mode="contained"
-                                                style={styles.viewProfileButton}
-                                                onPress={() => goToProfileUser(user.email)}>
-                                            View Profile
-                                        </Button>
-                                        {permissions.can_edit_details_about_users && (
-                                            <TouchableOpacity style={styles.settingsButton}
-                                                              onPress={() => openSettings(user)}>
-                                                <MaterialIcons name="settings" size={20} color="white"/>
-                                            </TouchableOpacity>
-                                        )}
-                                    </View>
-                                </View>
-                            )}
-                        </TouchableOpacity>
+                        <UserCard key={user.email} user={user} permissions={permissions} openSettings={openSettings}
+                                  toggleUserDetails={toggleUserDetails} expandedUserId={expandedUserId}
+                                  goToProfileUser={goToProfileUser} api_host={api_host}/>
                     ))}
                 </View>
 
@@ -239,14 +254,13 @@ export const Users = ({navigation}) => {
                     </>
                 )}
             </ScrollView>
-            {permissionEditingUser &&
+            {positionEditingUser &&
                 <PermissionModal
                     email={emailEditingUser}
-                    projectId={projectId}
                     positionUser={positionEditingUser}
                     permissionEditingUser={permissionEditingUser}
                     visible={!!permissionEditingUser}
-                    onClose={() => setPermissionEditingUser(null)}
+                    onClose={() => onClose()}
                 />
             }
         </View>

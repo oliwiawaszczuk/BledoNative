@@ -11,8 +11,7 @@ import {Tasks} from "../components/Project/Tasks";
 import {Reports} from "../components/Project/Reports";
 import {storage} from "../../api/store";
 import {Loading} from "../components/Loading";
-
-export const projectContent = createContext(null);
+import { projectContent } from "../../api/context";
 
 const ProjectScreen = ({route, navigation}) => {
     const { projectId } = route.params;
