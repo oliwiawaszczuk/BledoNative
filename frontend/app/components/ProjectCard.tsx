@@ -46,7 +46,7 @@ export const ProjectCard = ({item, handleCardPress, refetch}) => {
                 </Card>
             </TouchableOpacity>
 
-            <Modal
+            <Modal // Modal to view: move up and down
                 transparent={true}
                 visible={isModalVisible}
                 onRequestClose={toggleModal}

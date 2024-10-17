@@ -49,7 +49,7 @@ export const UsersScreen = ({navigation}) => {
             </View>
             {filteredUsers.map((user) => (
                 <TouchableOpacity key={user["email"]} style={styles.userContainer} onPress={() => changeScreen(user["email"])}>
-                    <Image source={{uri: `http://192.168.1.191:8081/assets/images/${user['img_path']}`}}
+                    <Image source={{uri: `${api_host.slice(0, -3)}/static/images/${user['img_path']}`}}
                            style={styles.avatar}/>
                     <Text style={styles.userText}>{user.username}</Text>
                 </TouchableOpacity>

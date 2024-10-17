@@ -3,7 +3,6 @@ import {StyleSheet} from "react-native";
 export const styles = StyleSheet.create({
     container3: {
         padding: 16,
-        backgroundColor: "#f9f9f9",
     },
     sectionTitle: {
         fontSize: 20,
@@ -58,7 +57,7 @@ export const styles = StyleSheet.create({
     },
     userDetails: {
         marginTop: 8,
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#f0f4f6",
         padding: 8,
         borderRadius: 8,
     },

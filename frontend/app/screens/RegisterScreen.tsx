@@ -112,11 +112,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
         backgroundColor: '#f0f0f0',
+        alignItems: 'center',
     },
     card: {
         padding: 16,
         borderRadius: 10,
         elevation: 4,
+        maxWidth: 400,
+        width: '100%',
     },
     title: {
         fontSize: 24,

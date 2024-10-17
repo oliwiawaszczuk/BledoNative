@@ -6,7 +6,7 @@ import {styles} from "../../assets/styles";
 import {Dashboard} from "../components/Project/Dashboard";
 import {Users} from "../components/Project/Users";
 import {Settings} from "../components/Project/Settings";
-import {Calendar} from "../components/Project/Calendar";
+import CalendarScreen from "../components/Project/Calendar";
 import {Tasks} from "../components/Project/Tasks";
 import {Reports} from "../components/Project/Reports";
 import {storage} from "../../api/store";
@@ -39,7 +39,7 @@ const ProjectScreen = ({route, navigation}) => {
                     {currentPage === "dashboard" && <Dashboard/>}
                     {currentPage === "users" && <Users navigation={navigation}/>}
                     {currentPage === "tasks" && <Tasks/>}
-                    {currentPage === "calendar" && <Calendar/>}
+                    {currentPage === "calendar" && <CalendarScreen/>}
                     {currentPage === "reports" && <Reports/>}
                     {currentPage === "settings" && <Settings/>}
                 </View>

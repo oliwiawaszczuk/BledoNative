@@ -53,7 +53,7 @@ function UserCard({user, permissions, toggleUserDetails, expandedUserId, goToPro
                                 onPress={() => goToProfileUser(user.email)}>
                             View Profile
                         </Button>
-                        {permissions.can_edit_details_about_users && (
+                        {permissions.can_edit_details_about_users && openSettings && (
                             <TouchableOpacity style={styles.settingsButton}
                                               onPress={() => openSettings(user)}>
                                 <MaterialIcons name="settings" size={20} color="white"/>
@@ -185,6 +185,9 @@ export const Users = ({navigation}) => {
             <ScrollView contentContainerStyle={styles.container3}>
                 <Title style={styles.sectionTitle}>Users in project</Title>
                 <View style={styles.usersContainer}>
+                    <UserCard user={creatorUser} permissions={permissions} openSettings={null}
+                                  toggleUserDetails={toggleUserDetails} expandedUserId={expandedUserId}
+                                  goToProfileUser={goToProfileUser} api_host={api_host} />
                     {filteredUsers.map((user) => (
                         <UserCard key={user.email} user={user} permissions={permissions} openSettings={openSettings}
                                   toggleUserDetails={toggleUserDetails} expandedUserId={expandedUserId}
